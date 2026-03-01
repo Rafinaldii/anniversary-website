@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>For Nadya 💗</title>
+    <link rel="stylesheet" href="style.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&family=Playfair+Display&display=swap" rel="stylesheet" />
+  </head>
+
+  <body class="lock-body">
+    <div class="lock-container">
+      <img src="assets/heart.png" class="heart-img" />
+
+      <div class="lock-overlay">
+        <div class="digits">
+          <div class="digit-box">
+            <button onclick="changeDigit(0, 1)">▲</button>
+            <span id="digit0">0</span>
+            <button onclick="changeDigit(0, -1)">▼</button>
+          </div>
+
+          <div class="digit-box">
+            <button onclick="changeDigit(1, 1)">▲</button>
+            <span id="digit1">0</span>
+            <button onclick="changeDigit(1, -1)">▼</button>
+          </div>
+
+          <div class="digit-box">
+            <button onclick="changeDigit(2, 1)">▲</button>
+            <span id="digit2">0</span>
+            <button onclick="changeDigit(2, -1)">▼</button>
+          </div>
+
+          <div class="digit-box">
+            <button onclick="changeDigit(3, 1)">▲</button>
+            <span id="digit3">0</span>
+            <button onclick="changeDigit(3, -1)">▼</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>

@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Our Playlist 💗</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet" />
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Poppins", sans-serif;
+        background: linear-gradient(135deg, #ffe6f0, #ffd6eb, #ffc2e0);
+        background-size: 400% 400%;
+        animation: gradientMove 15s ease infinite;
+        color: #5c0033;
+      }
+
+      @keyframes gradientMove {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      .top-bar {
+        padding: 20px 8%;
+      }
+
+      .back-btn {
+        text-decoration: none;
+        background: white;
+        padding: 8px 18px;
+        border-radius: 30px;
+        font-size: 0.85rem;
+        color: #ff1493;
+        font-weight: 500;
+        box-shadow: 0 8px 20px rgba(255, 20, 147, 0.2);
+        transition: 0.3s;
+      }
+
+      .back-btn:hover {
+        background: #ff1493;
+        color: white;
+      }
+
+      header {
+        text-align: center;
+        padding: 40px 20px;
+      }
+
+      header h1 {
+        font-family: "Playfair Display", serif;
+        font-size: 2.8rem;
+        margin-bottom: 10px;
+      }
+
+      header p {
+        opacity: 0.8;
+      }
+
+      .player-wrapper {
+        display: flex;
+        justify-content: center;
+        padding: 40px 8% 80px 8%;
+      }
+
+      .player-box {
+        width: 100%;
+        max-width: 900px;
+        border-radius: 25px;
+        overflow: hidden;
+        box-shadow: 0 20px 60px rgba(255, 20, 147, 0.35);
+        transition: 0.4s ease;
+      }
+
+      .player-box:hover {
+        transform: scale(1.02);
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="top-bar">
+      <a href="home.html" class="back-btn">⬅ Back Home</a>
+    </div>
+
+    <header>
+      <h1>Our Love Playlist 💗</h1>
+      <p>Songs that tell our story.</p>
+    </header>
+
+    <div class="player-wrapper">
+      <div class="player-box">
+        <iframe
+          style="border-radius: 12px"
+          src="https://open.spotify.com/embed/playlist/3CIUhWLzrit7GtQnwwmfX5?utm_source=generator"
+          width="100%"
+          height="500"
+          frameborder="0"
+          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+          loading="lazy"
+        >
+        </iframe>
+      </div>
+    </div>
+  </body>
+</html>

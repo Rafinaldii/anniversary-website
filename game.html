@@ -1,0 +1,529 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Heart Chaser 💕</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: linear-gradient(135deg, #ffd6e8, #ffb3d1, #ffc8e0);
+        font-family: "Nunito", sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+      }
+
+      .game-container {
+        background: linear-gradient(180deg, #fff0f6 0%, #ffe4f0 100%);
+        width: 360px;
+        border-radius: 36px;
+        box-shadow:
+          0 20px 60px rgba(255, 80, 140, 0.3),
+          inset 0 1px 0 rgba(255, 255, 255, 0.8);
+        position: relative;
+        overflow: hidden;
+        padding: 20px 20px 24px;
+        border: 3px solid #ffb3d1;
+      }
+
+      /* TOP HEART INDICATOR */
+      .top-indicator {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 8px;
+      }
+      .top-indicator .heart-icon {
+        background: #ff4d8d;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+        box-shadow: 0 4px 12px rgba(255, 77, 141, 0.4);
+      }
+
+      h2 {
+        text-align: center;
+        color: #c2185b;
+        font-family: "Playfair Display", serif;
+        font-size: 22px;
+        margin: 0 0 4px;
+      }
+      .subtitle {
+        text-align: center;
+        font-size: 12px;
+        color: #e91e8c;
+        margin-bottom: 12px;
+      }
+
+      /* MACHINE FRAME */
+      .machine-frame {
+        background: linear-gradient(180deg, #fce4ec, #f8bbd0);
+        border-radius: 24px;
+        padding: 12px;
+        border: 2px solid #f48fb1;
+        box-shadow: inset 0 2px 8px rgba(255, 105, 180, 0.2);
+        position: relative;
+      }
+
+      /* TOP RAIL */
+      .rail {
+        background: linear-gradient(180deg, #f48fb1, #e91e8c);
+        height: 14px;
+        border-radius: 7px;
+        margin-bottom: 0;
+        position: relative;
+        box-shadow: 0 3px 8px rgba(233, 30, 140, 0.3);
+      }
+
+      /* MACHINE WINDOW */
+      .machine-window {
+        background: rgba(255, 255, 255, 0.6);
+        border-radius: 0 0 18px 18px;
+        height: 240px;
+        position: relative;
+        overflow: hidden;
+        border: 2px solid #f48fb1;
+        border-top: none;
+        backdrop-filter: blur(4px);
+      }
+
+      /* CLAW SLIDER on rail */
+      #slider-block {
+        position: absolute;
+        top: -4px;
+        width: 28px;
+        height: 22px;
+        background: #e91e8c;
+        border-radius: 6px;
+        transform: translateX(-50%);
+        transition: left 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        box-shadow: 0 2px 6px rgba(233, 30, 140, 0.5);
+        z-index: 10;
+      }
+
+      /* ARM (wire) */
+      #arm {
+        position: absolute;
+        width: 3px;
+        background: linear-gradient(180deg, #c2185b, #ad1457);
+        top: 0;
+        height: 30px;
+        transform: translateX(-50%);
+        transition:
+          left 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+          height 0.4s ease;
+        z-index: 5;
+        border-radius: 2px;
+      }
+
+      /* CLAW HOOK */
+      #claw {
+        position: absolute;
+        top: 30px;
+        width: 34px;
+        height: 20px;
+        transform: translateX(-50%);
+        transition:
+          left 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+          top 0.4s ease;
+        z-index: 6;
+      }
+      #claw::before,
+      #claw::after,
+      #claw .mid {
+        content: "";
+        position: absolute;
+        width: 3px;
+        height: 18px;
+        background: #ad1457;
+        border-radius: 0 0 4px 4px;
+      }
+      #claw::before {
+        left: 0;
+        transform: rotate(-20deg);
+        transform-origin: top center;
+      }
+      #claw::after {
+        right: 0;
+        transform: rotate(20deg);
+        transform-origin: top center;
+      }
+      #claw .mid {
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      /* HEART TARGET */
+      #heart-target {
+        position: absolute;
+        font-size: 32px;
+        transition: opacity 0.3s;
+        transform: translateX(-50%);
+        z-index: 4;
+        bottom: 30px;
+        filter: drop-shadow(0 2px 4px rgba(255, 77, 141, 0.4));
+      }
+      #heart-target.caught {
+        animation: catchAnim 0.4s forwards;
+      }
+      @keyframes catchAnim {
+        0% {
+          transform: translateX(-50%) scale(1);
+        }
+        50% {
+          transform: translateX(-50%) scale(1.5);
+          opacity: 1;
+        }
+        100% {
+          transform: translateX(-50%) scale(0);
+          opacity: 0;
+        }
+      }
+
+      /* DECORATIVE MINI HEARTS at bottom */
+      .deco-hearts {
+        position: absolute;
+        bottom: 10px;
+        width: 100%;
+        display: flex;
+        justify-content: space-around;
+        opacity: 0.25;
+        font-size: 16px;
+        pointer-events: none;
+      }
+
+      /* SCORE DOTS */
+      .score-dots {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin: 12px 0 8px;
+      }
+      .dot {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: #fce4ec;
+        border: 2px solid #f48fb1;
+        transition: 0.3s;
+      }
+      .dot.filled {
+        background: #ff4d8d;
+        border-color: #c2185b;
+        box-shadow: 0 0 8px rgba(255, 77, 141, 0.5);
+      }
+
+      /* CONTROLS */
+      .controls {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 14px;
+        margin-top: 4px;
+      }
+
+      .btn-arrow {
+        width: 52px;
+        height: 52px;
+        border: none;
+        border-radius: 50%;
+        background: #fce4ec;
+        color: #e91e8c;
+        font-size: 20px;
+        cursor: pointer;
+        box-shadow: 0 3px 10px rgba(255, 105, 180, 0.25);
+        transition: 0.15s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .btn-arrow:hover {
+        transform: scale(1.08);
+        background: #f8bbd0;
+      }
+      .btn-arrow:active {
+        transform: scale(0.95);
+      }
+
+      .btn-seize {
+        background: linear-gradient(135deg, #e91e8c, #ff4d8d);
+        color: white;
+        border: none;
+        border-radius: 24px;
+        padding: 14px 22px;
+        font-family: "Nunito", sans-serif;
+        font-weight: 900;
+        font-size: 13px;
+        letter-spacing: 0.5px;
+        cursor: pointer;
+        box-shadow: 0 5px 15px rgba(233, 30, 140, 0.4);
+        transition: 0.15s;
+        line-height: 1.2;
+        text-align: center;
+      }
+      .btn-seize:hover {
+        transform: scale(1.05);
+      }
+      .btn-seize:active {
+        transform: scale(0.97);
+      }
+      .btn-seize:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      /* REWARD OVERLAY */
+      .reward {
+        position: absolute;
+        inset: 0;
+        background: rgba(255, 240, 246, 0.97);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        opacity: 0;
+        pointer-events: none;
+        transition: 0.5s;
+        border-radius: 36px;
+        z-index: 100;
+      }
+      .reward.show {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .voucher {
+        background: linear-gradient(135deg, #ff4d8d, #ff99bb);
+        color: white;
+        width: 290px;
+        padding: 30px 28px;
+        border-radius: 20px;
+        text-align: center;
+        position: relative;
+        box-shadow: 0 20px 50px rgba(255, 105, 180, 0.45);
+      }
+      .voucher::before,
+      .voucher::after {
+        content: "";
+        position: absolute;
+        width: 26px;
+        height: 26px;
+        background: #ffe4f0;
+        border-radius: 50%;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+      .voucher::before {
+        left: -13px;
+      }
+      .voucher::after {
+        right: -13px;
+      }
+      .voucher h1 {
+        margin: 0 0 8px;
+        font-family: "Playfair Display", serif;
+        font-size: 22px;
+      }
+      .voucher p {
+        margin: 4px 0;
+        font-size: 14px;
+      }
+      .claim-btn {
+        margin-top: 18px;
+        background: white;
+        color: #ff4d8d;
+        font-weight: 700;
+        font-family: "Nunito", sans-serif;
+        border: none;
+        border-radius: 12px;
+        padding: 10px 20px;
+        font-size: 13px;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+
+      /* MISS FLASH */
+      .machine-window.miss-flash {
+        animation: missFlash 0.4s;
+      }
+      @keyframes missFlash {
+        0%,
+        100% {
+          background: rgba(255, 255, 255, 0.6);
+        }
+        50% {
+          background: rgba(255, 200, 200, 0.6);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="game-container">
+      <div class="top-indicator">
+        <div class="heart-icon">💗</div>
+      </div>
+      <h2>Capit Hatiku</h2>
+      <p class="subtitle">Catch my heart if you can! 🐻</p>
+
+      <!-- MACHINE -->
+      <div class="machine-frame">
+        <div class="rail" id="rail">
+          <div id="slider-block"></div>
+        </div>
+        <div class="machine-window" id="machine-window">
+          <div id="arm"></div>
+          <div id="claw"><div class="mid"></div></div>
+          <div id="heart-target">💗</div>
+          <div class="deco-hearts"><span>💕</span><span>💗</span><span>💕</span><span>💗</span><span>💕</span></div>
+        </div>
+      </div>
+
+      <!-- SCORE -->
+      <div class="score-dots">
+        <div class="dot" id="d0"></div>
+        <div class="dot" id="d1"></div>
+        <div class="dot" id="d2"></div>
+      </div>
+
+      <!-- CONTROLS -->
+      <div class="controls">
+        <button class="btn-arrow" id="btnLeft" onclick="move(-1)">←</button>
+        <button class="btn-seize" id="btnGrab" onclick="grab()">SEIZE MY<br />HEART</button>
+        <button class="btn-arrow" id="btnRight" onclick="move(1)">→</button>
+      </div>
+
+      <!-- REWARD -->
+      <div class="reward" id="reward">
+        <div class="voucher">
+          <h1>Voucher Rp. 20.000</h1>
+          <p>Untuk merayakan 2 tahun kita</p>
+          <p><b>Khusus Nadya 💗</b></p>
+          <button class="claim-btn" onclick="claimReward()">📸 Screenshot & Kirim Sekarang!</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // positions: 0..4 mapped to % across window
+      const POSITIONS = [12, 30, 50, 70, 88]; // % left in machine-window
+      let clawPos = 2; // index 0-4
+      let heartPos = Math.floor(Math.random() * 5);
+      let collected = 0;
+      let busy = false;
+
+      const arm = document.getElementById("arm");
+      const claw = document.getElementById("claw");
+      const sliderBlock = document.getElementById("slider-block");
+      const heartEl = document.getElementById("heart-target");
+      const reward = document.getElementById("reward");
+      const machineWindow = document.getElementById("machine-window");
+      const btnGrab = document.getElementById("btnGrab");
+
+      function pct(idx) {
+        return POSITIONS[idx] + "%";
+      }
+
+      function renderClaw() {
+        const p = pct(clawPos);
+        sliderBlock.style.left = p;
+        arm.style.left = p;
+        claw.style.left = p;
+        // arm top stays fixed at 0, claw top = arm height
+        claw.style.top = arm.style.height || "30px";
+      }
+
+      function spawnHeart() {
+        // pick random pos different from current if possible
+        let newPos;
+        do {
+          newPos = Math.floor(Math.random() * 5);
+        } while (newPos === heartPos && Math.random() > 0.2);
+        heartPos = newPos;
+        heartEl.classList.remove("caught");
+        heartEl.style.opacity = "1";
+        heartEl.style.left = pct(heartPos);
+      }
+
+      function updateDots() {
+        for (let i = 0; i < 3; i++) {
+          document.getElementById("d" + i).classList.toggle("filled", i < collected);
+        }
+      }
+
+      function move(dir) {
+        if (busy) return;
+        clawPos = Math.max(0, Math.min(4, clawPos + dir));
+        renderClaw();
+      }
+
+      function grab() {
+        if (busy) return;
+        busy = true;
+        btnGrab.disabled = true;
+
+        // Lower arm
+        const dropTarget = 185; // px from top of machine-window
+        arm.style.height = dropTarget + "px";
+        claw.style.top = dropTarget + "px";
+
+        setTimeout(() => {
+          if (clawPos === heartPos) {
+            // CATCH!
+            heartEl.classList.add("caught");
+            collected++;
+            updateDots();
+
+            setTimeout(() => {
+              arm.style.height = "30px";
+              claw.style.top = "30px";
+
+              if (collected >= 3) {
+                setTimeout(() => reward.classList.add("show"), 400);
+              } else {
+                setTimeout(() => {
+                  spawnHeart();
+                  busy = false;
+                  btnGrab.disabled = false;
+                }, 300);
+              }
+            }, 450);
+          } else {
+            // MISS
+            machineWindow.classList.add("miss-flash");
+            setTimeout(() => machineWindow.classList.remove("miss-flash"), 400);
+
+            arm.style.height = "30px";
+            claw.style.top = "30px";
+
+            setTimeout(() => {
+              busy = false;
+              btnGrab.disabled = false;
+            }, 450);
+          }
+        }, 420);
+      }
+
+      function claimReward() {
+        alert("Cuma bisa sekali ya bebeee 😘");
+        setTimeout(() => {
+          window.location.href = "home.html";
+        }, 1500);
+      }
+
+      // Init
+      arm.style.height = "30px";
+      claw.style.top = "30px";
+      spawnHeart();
+      renderClaw();
+    </script>
+  </body>
+</html>
